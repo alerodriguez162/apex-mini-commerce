@@ -1,0 +1,134 @@
+:root {
+  --ink: #17302b;
+  --kelp: #3d7a62;
+  --foam: #d7e4dc;
+  --salt: #eef3f0;
+  --sand: #c5b49a;
+  --error: #b85c4a;
+  --font-display: "Syne", "Trebuchet MS", sans-serif;
+  --font-body: "Outfit", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--salt);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.page {
+  min-height: 100svh;
+}
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: 2.5rem 1.5rem 0;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #8eb8c4 0%, #c9d9c4 42%, #eef3f0 100%);
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 18vw, 11rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  color: var(--ink);
+}
+
+.hero h1 {
+  margin: 1.5rem 0 0;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.lede {
+  margin: 0.85rem 0 0;
+  max-width: 36rem;
+  color: #3a524b;
+  font-size: 1.05rem;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid var(--ink);
+  animation: rise 700ms ease both;
+}
+
+.shore {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 4rem;
+  animation: swell 8s ease-in-out infinite alternate;
+}
+
+.status {
+  padding: 2.5rem 1.5rem 4rem;
+  max-width: 40rem;
+}
+
+.status h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kelp);
+}
+
+.ok {
+  margin: 0;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.95rem;
+}
+
+.error {
+  margin: 0;
+  color: var(--error);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes swell {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-18px);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-top: 1.75rem;
+  }
+}
