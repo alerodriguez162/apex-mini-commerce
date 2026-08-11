@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import productsRouter from './routes/products.js'
 
 export const app = express()
 
@@ -13,6 +14,8 @@ app.get('/api/health', (_req, res) => {
     timestamp: new Date().toISOString(),
   })
 })
+
+app.use('/api/products', productsRouter)
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' })

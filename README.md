@@ -22,6 +22,14 @@ Built with an AI-assisted workflow. Courses in focus: *Advanced Features in Reac
 
 Workflow: one branch per day → merge into `main` at end of day.
 
+## API (Day 2)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/health` | Health check |
+| GET | `/api/products` | List products (`?category=ropa\|calzado\|accesorios`) |
+| GET | `/api/products/:slug` | Product by slug |
+
 ## Getting started
 
 ```bash

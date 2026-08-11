@@ -1,0 +1,184 @@
+import Database from 'better-sqlite3'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import type { Product, ProductCategory } from './types.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const dataDir = path.join(__dirname, '..', 'data')
+const dbPath = path.join(dataDir, 'store.db')
+
+fs.mkdirSync(dataDir, { recursive: true })
+
+const db = new Database(dbPath)
+db.pragma('journal_mode = WAL')
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS products (
+    id TEXT PRIMARY KEY,
+    slug TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    hue TEXT NOT NULL,
+    stock INTEGER NOT NULL
+  );
+`)
+
+type ProductRow = Product
+
+const SEED: Product[] = [
+  {
+    id: 'p1',
+    slug: 'camisa-lino-marea',
+    name: 'Camisa de lino Marea',
+    description: 'Lino lavado, corte amplio, se mueve con el viento de la orilla.',
+    price: 1890,
+    category: 'ropa',
+    hue: '#7aa8a0',
+    stock: 18,
+  },
+  {
+    id: 'p2',
+    slug: 'poncho-salitre',
+    name: 'Poncho Salitre',
+    description: 'Tejido abierto, para atardeceres que se enfrían de golpe.',
+    price: 2450,
+    category: 'ropa',
+    hue: '#c4a574',
+    stock: 9,
+  },
+  {
+    id: 'p3',
+    slug: 'short-espuma',
+    name: 'Short Espuma',
+    description: 'Secado rápido, bolsillo profundo, para caminar la rompiente.',
+    price: 980,
+    category: 'ropa',
+    hue: '#3d5c6e',
+    stock: 24,
+  },
+  {
+    id: 'p4',
+    slug: 'sandalia-arrecife',
+    name: 'Sandalia Arrecife',
+    description: 'Suela flexible y tira de cuero vegetal. Pies en la arena.',
+    price: 1320,
+    category: 'calzado',
+    hue: '#8b6b4a',
+    stock: 14,
+  },
+  {
+    id: 'p5',
+    slug: 'alpargata-duna',
+    name: 'Alpargata Duna',
+    description: 'Yute y lona. Ligera como si no llevaras nada.',
+    price: 890,
+    category: 'calzado',
+    hue: '#d4c4a8',
+    stock: 20,
+  },
+  {
+    id: 'p6',
+    slug: 'bolsa-yute',
+    name: 'Bolsa de yute Bruma',
+    description: 'Capacidad para toalla, libro y una pieza de fruta.',
+    price: 640,
+    category: 'accesorios',
+    hue: '#b9a078',
+    stock: 30,
+  },
+  {
+    id: 'p7',
+    slug: 'sombrero-palma',
+    name: 'Sombrero de palma',
+    description: 'Ala ancha, trenza a mano. Sombra nítida al mediodía.',
+    price: 760,
+    category: 'accesorios',
+    hue: '#e2d2a8',
+    stock: 11,
+  },
+  {
+    id: 'p8',
+    slug: 'gorra-orilla',
+    name: 'Gorra Orilla',
+    description: 'Algodón pesado, bordado bajo. Para el camino de regreso.',
+    price: 420,
+    category: 'accesorios',
+    hue: '#17302b',
+    stock: 40,
+  },
+  {
+    id: 'p9',
+    slug: 'toalla-costa',
+    name: 'Toalla Costa',
+    description: 'Algodón grueso, raya única. Se tiende y ya es paisaje.',
+    price: 780,
+    category: 'accesorios',
+    hue: '#6a9bb8',
+    stock: 16,
+  },
+  {
+    id: 'p10',
+    slug: 'chaqueta-viento',
+    name: 'Chaqueta Viento',
+    description: 'Corta vientos salados. Se guarda en su propio bolsillo.',
+    price: 2680,
+    category: 'ropa',
+    hue: '#2f4a58',
+    stock: 7,
+  },
+]
+
+const count = db.prepare('SELECT COUNT(*) as n FROM products').get() as { n: number }
+if (count.n === 0) {
+  const insert = db.prepare(
+    `INSERT INTO products (id, slug, name, description, price, category, hue, stock)
+     VALUES (@id, @slug, @name, @description, @price, @category, @hue, @stock)`,
+  )
+  const tx = db.transaction((rows: Product[]) => {
+    for (const row of rows) insert.run(row)
+  })
+  tx(SEED)
+}
+
+export type ProductFilters = {
+  category?: ProductCategory
+}
+
+export function listProducts(filters: ProductFilters = {}): Product[] {
+  if (filters.category) {
+    return db
+      .prepare(
+        `SELECT id, slug, name, description, price, category, hue, stock
+         FROM products WHERE category = ? ORDER BY name`,
+      )
+      .all(filters.category) as ProductRow[]
+  }
+
+  return db
+    .prepare(
+      `SELECT id, slug, name, description, price, category, hue, stock
+       FROM products ORDER BY name`,
+    )
+    .all() as ProductRow[]
+}
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return db
+    .prepare(
+      `SELECT id, slug, name, description, price, category, hue, stock
+       FROM products WHERE slug = ?`,
+    )
+    .get(slug) as ProductRow | undefined
+}
+
+export function getProductById(id: string): Product | undefined {
+  return db
+    .prepare(
+      `SELECT id, slug, name, description, price, category, hue, stock
+       FROM products WHERE id = ?`,
+    )
+    .get(id) as ProductRow | undefined
+}
