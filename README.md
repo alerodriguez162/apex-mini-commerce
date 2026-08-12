@@ -20,7 +20,7 @@ Built with an AI-assisted workflow. Courses in focus: *Advanced Features in Reac
 | 4 | 13 Aug | `w2-day-4-cart` | Cart persistence, checkout, orders |
 | 5 | 14 Aug | `w2-day-5-performance` | Search, code splitting, polish, Vercel |
 
-Workflow: one branch per day → merge into `main` at end of day.
+**Day 3 — Storefront:** React Router, catalog/detail, cart context (state/dispatch split), custom hooks, `startTransition` on filters.
 
 ## API (Day 2)
 
