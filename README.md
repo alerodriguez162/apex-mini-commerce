@@ -22,6 +22,8 @@ Built with an AI-assisted workflow. Courses in focus: *Advanced Features in Reac
 
 **Day 3 — Storefront:** React Router, catalog/detail, cart context (state/dispatch split), custom hooks, `startTransition` on filters.
 
+**Day 4 — Cart:** checkout with `POST /api/orders`, stock decrement, order confirmation.
+
 ## API (Day 2)
 
 | Method | Path | Description |
@@ -29,6 +31,8 @@ Built with an AI-assisted workflow. Courses in focus: *Advanced Features in Reac
 | GET | `/api/health` | Health check |
 | GET | `/api/products` | List products (`?category=ropa\|calzado\|accesorios`) |
 | GET | `/api/products/:slug` | Product by slug |
+| POST | `/api/orders` | Create order |
+| GET | `/api/orders/:id` | Get order |
 
 ## Getting started
 
