@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { createOrder } from '../api'
 import { useCart } from '../cart/useCart'
+import { ProductArt } from '../components/ProductArt'
 import { formatPrice } from '../types'
 
 export function CartPage() {
@@ -38,33 +39,32 @@ export function CartPage() {
           Vacía. <Link to="/tienda">Ir a la tienda</Link>
         </p>
       ) : (
-        <>
+        <div className="cart-layout">
           <ul>
             {items.map((item) => (
               <li key={item.product.id} className="cart-row">
-                <span className="swatch" style={{ background: item.product.hue }} />
+                <ProductArt product={item.product} className="art-mini" />
                 <div>
                   <h2>{item.product.name}</h2>
                   <p>{formatPrice(item.product.price)}</p>
                 </div>
-                <label>
-                  Cant.
-                  <input
-                    type="number"
-                    min={1}
-                    max={item.product.stock}
-                    value={item.qty}
-                    onChange={(e) => setQty(item.product.id, Number(e.target.value))}
-                  />
-                </label>
+                <div className="qty-row">
+                  <button type="button" onClick={() => setQty(item.product.id, item.qty - 1)}>
+                    −
+                  </button>
+                  <span>{item.qty}</span>
+                  <button type="button" onClick={() => setQty(item.product.id, item.qty + 1)}>
+                    +
+                  </button>
+                </div>
                 <button type="button" className="linkish" onClick={() => remove(item.product.id)}>
                   Quitar
                 </button>
               </li>
             ))}
           </ul>
-          <p className="total">Total {formatPrice(total)}</p>
           <form className="checkout" onSubmit={handleCheckout}>
+            <p className="total">Total {formatPrice(total)}</p>
             <label>
               Correo para el pedido
               <input
@@ -80,7 +80,7 @@ export function CartPage() {
               {submitting ? 'Enviando…' : 'Confirmar pedido'}
             </button>
           </form>
-        </>
+        </div>
       )}
     </main>
   )

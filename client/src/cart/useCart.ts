@@ -11,7 +11,7 @@ export function useCart() {
     items,
     count,
     total,
-    add: (product: Product) => dispatch({ type: 'add', product }),
+    add: (product: Product, qty = 1) => dispatch({ type: 'add', product, qty }),
     remove: (id: string) => dispatch({ type: 'remove', id }),
     setQty: (id: string, qty: number) => dispatch({ type: 'setQty', id, qty }),
     clear: () => dispatch({ type: 'clear' }),

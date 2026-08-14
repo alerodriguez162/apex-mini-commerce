@@ -11,7 +11,7 @@ type CartState = {
 }
 
 type CartAction =
-  | { type: 'add'; product: Product }
+  | { type: 'add'; product: Product; qty?: number }
   | { type: 'remove'; id: string }
   | { type: 'setQty'; id: string; qty: number }
   | { type: 'hydrate'; items: CartItem[] }
@@ -25,17 +25,23 @@ function reducer(state: CartState, action: CartAction): CartState {
     case 'hydrate':
       return { items: action.items }
     case 'add': {
+      const qty = action.qty ?? 1
       const existing = state.items.find((item) => item.product.id === action.product.id)
       if (existing) {
         return {
           items: state.items.map((item) =>
             item.product.id === action.product.id
-              ? { ...item, qty: Math.min(item.qty + 1, item.product.stock) }
+              ? { ...item, qty: Math.min(item.qty + qty, item.product.stock) }
               : item,
           ),
         }
       }
-      return { items: [...state.items, { product: action.product, qty: 1 }] }
+      return {
+        items: [
+          ...state.items,
+          { product: action.product, qty: Math.min(qty, action.product.stock) },
+        ],
+      }
     }
     case 'remove':
       return { items: state.items.filter((item) => item.product.id !== action.id) }
