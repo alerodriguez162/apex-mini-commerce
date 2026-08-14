@@ -211,6 +211,23 @@ body {
   border-bottom: 2px solid var(--ink);
 }
 
+.search {
+  display: grid;
+  gap: 0.35rem;
+  margin: 1rem 0 0;
+  max-width: 22rem;
+  color: #5a7269;
+  font-size: 0.9rem;
+}
+
+.search input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--foam);
+  background: white;
+  font: inherit;
+  color: var(--ink);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));

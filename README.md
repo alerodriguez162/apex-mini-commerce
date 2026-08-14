@@ -24,6 +24,14 @@ Built with an AI-assisted workflow. Courses in focus: *Advanced Features in Reac
 
 **Day 4 — Cart:** checkout with `POST /api/orders`, stock decrement, order confirmation.
 
+**Day 5 — Performance:** `React.lazy` + `Suspense`, `useDeferredValue` search, error boundary, prefetch on hover, Vercel deploy.
+
+Deploy:
+
+```bash
+npx vercel --prod
+```
+
 ## API (Day 2)
 
 | Method | Path | Description |

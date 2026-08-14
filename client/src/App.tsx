@@ -1,27 +1,38 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CartProvider } from './cart/CartContext'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { Layout } from './components/Layout'
-import { CartPage } from './pages/CartPage'
-import { CatalogPage } from './pages/CatalogPage'
 import { HomePage } from './pages/HomePage'
-import { OrderPage } from './pages/OrderPage'
-import { ProductPage } from './pages/ProductPage'
 import './App.css'
+
+const CatalogPage = lazy(() =>
+  import('./pages/CatalogPage').then((m) => ({ default: m.CatalogPage })),
+)
+const ProductPage = lazy(() =>
+  import('./pages/ProductPage').then((m) => ({ default: m.ProductPage })),
+)
+const CartPage = lazy(() => import('./pages/CartPage').then((m) => ({ default: m.CartPage })))
+const OrderPage = lazy(() => import('./pages/OrderPage').then((m) => ({ default: m.OrderPage })))
 
 export default function App() {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="tienda" element={<CatalogPage />} />
-            <Route path="tienda/:slug" element={<ProductPage />} />
-            <Route path="bolsa" element={<CartPage />} />
-            <Route path="pedido/:id" element={<OrderPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </CartProvider>
+    <ErrorBoundary>
+      <CartProvider>
+        <BrowserRouter>
+          <Suspense fallback={<p className="empty" style={{ padding: '2rem 1.5rem' }}>Cargando…</p>}>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route path="tienda" element={<CatalogPage />} />
+                <Route path="tienda/:slug" element={<ProductPage />} />
+                <Route path="bolsa" element={<CartPage />} />
+                <Route path="pedido/:id" element={<OrderPage />} />
+              </Route>
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </CartProvider>
+    </ErrorBoundary>
   )
 }
