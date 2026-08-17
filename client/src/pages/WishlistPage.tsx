@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { fetchProducts } from '../api'
+import { EmptyState } from '../components/EmptyState'
 import { ProductTile } from '../components/ProductTile'
 import type { Product } from '../types'
 import { useWishlist } from '../wishlist/WishlistContext'
@@ -17,9 +17,10 @@ export function WishlistPage() {
     <main className="catalog">
       <h1>Deseos</h1>
       {ids.length === 0 ? (
-        <p className="empty">
-          Nada guardado. <Link to="/tienda">Ir a la tienda</Link>
-        </p>
+        <EmptyState
+          title="Nada anclado aún"
+          copy="Guarda las piezas que quieras volver a ver cuando baje la marea."
+        />
       ) : (
         <div className="grid">
           {products.map((product) => (

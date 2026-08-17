@@ -1,16 +1,34 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { createOrder } from '../api'
 import { useCart } from '../cart/useCart'
+import { EmptyState } from '../components/EmptyState'
 import { ProductArt } from '../components/ProductArt'
 import { formatPrice } from '../types'
+
+const COUPON = 'ORILLA10'
+const DISCOUNT = 0.1
 
 export function CartPage() {
   const { items, total, setQty, remove, clear } = useCart()
   const [email, setEmail] = useState('')
+  const [coupon, setCoupon] = useState('')
+  const [applied, setApplied] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
+  const discount = applied ? Math.round(total * DISCOUNT) : 0
+  const payable = total - discount
+
+  function applyCoupon() {
+    if (coupon.trim().toUpperCase() === COUPON) {
+      setApplied(true)
+      setError(null)
+    } else {
+      setApplied(false)
+      setError('Cupón no válido. Prueba ORILLA10.')
+    }
+  }
 
   async function handleCheckout(event: FormEvent) {
     event.preventDefault()
@@ -35,9 +53,10 @@ export function CartPage() {
     <main className="cart">
       <h1>Bolsa</h1>
       {items.length === 0 ? (
-        <p className="empty">
-          Vacía. <Link to="/tienda">Ir a la tienda</Link>
-        </p>
+        <EmptyState
+          title="La bolsa está en calma"
+          copy="Aún no hay piezas. El viento trae lino, yute y sal."
+        />
       ) : (
         <div className="cart-layout">
           <ul>
@@ -64,7 +83,26 @@ export function CartPage() {
             ))}
           </ul>
           <form className="checkout" onSubmit={handleCheckout}>
-            <p className="total">Total {formatPrice(total)}</p>
+            <p className="total">Subtotal {formatPrice(total)}</p>
+            {applied && (
+              <p className="stock">
+                Cupón {COUPON}: −{formatPrice(discount)}
+              </p>
+            )}
+            <p className="total">A pagar {formatPrice(payable)}</p>
+            <label>
+              Cupón
+              <div className="coupon-row">
+                <input
+                  value={coupon}
+                  onChange={(e) => setCoupon(e.target.value)}
+                  placeholder="ORILLA10"
+                />
+                <button type="button" className="ghost-btn" onClick={applyCoupon}>
+                  Aplicar
+                </button>
+              </div>
+            </label>
             <label>
               Correo para el pedido
               <input

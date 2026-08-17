@@ -4,6 +4,7 @@ import { fetchProduct, fetchProducts } from '../api'
 import { useCart } from '../cart/useCart'
 import { ProductArt } from '../components/ProductArt'
 import { ProductTile } from '../components/ProductTile'
+import { SeenRail } from '../components/SeenRail'
 import { rememberProduct } from '../hooks/useSeen'
 import { useUi } from '../ui/UiContext'
 import { CATEGORY_LABELS, formatPrice, type Product } from '../types'
@@ -76,7 +77,7 @@ export function ProductPage() {
     <>
       <main className="detail">
         <ProductArt product={product} className="art-hero" />
-        <div className="detail-copy">
+        <div className="detail-copy card">
           <p className="eyebrow">{CATEGORY_LABELS[product.category]}</p>
           <h1>{product.name}</h1>
           <p className="lede">{product.description}</p>
@@ -138,6 +139,7 @@ export function ProductPage() {
           </div>
         </section>
       )}
+      <SeenRail exclude={product.slug} />
     </>
   )
 }

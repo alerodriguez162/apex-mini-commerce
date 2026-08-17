@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { ProductTile } from '../components/ProductTile'
+import { SeenRail } from '../components/SeenRail'
 import { useProducts } from '../hooks/useProducts'
+
+const TICKER = ['Lino lavado', 'Yute', 'Salitre', 'Corte amplio', 'Hecho lento', 'Costa']
 
 export function HomePage() {
   const { products } = useProducts()
@@ -9,28 +12,46 @@ export function HomePage() {
   return (
     <>
       <header className="hero">
-        <p className="brand">Orilla</p>
-        <h1>Ropa de costa, hecha para el viento.</h1>
-        <p className="lede">Lino, yute y sal. Piezas lentas para días junto al mar.</p>
-        <Link className="cta" to="/tienda">
-          Entrar a la tienda
-        </Link>
-        <svg className="shore" viewBox="0 0 1200 280" aria-hidden="true">
-          <path
-            d="M0 180 C 180 90, 320 240, 520 150 C 720 60, 880 210, 1200 110 L 1200 280 L 0 280 Z"
-            fill="#2a5c4c"
-          />
-          <path
-            d="M0 210 C 220 140, 400 250, 640 180 C 880 110, 1040 230, 1200 160 L 1200 280 L 0 280 Z"
-            fill="#17302b"
-          />
-        </svg>
+        <div className="hero-copy">
+          <p className="eyebrow">Nueva marea · 26</p>
+          <p className="brand">Orilla</p>
+          <h1>Ropa de costa, hecha para el viento.</h1>
+          <p className="lede">Lino, yute y sal. Piezas lentas para días junto al mar.</p>
+          <div className="hero-actions">
+            <Link className="cta-btn" to="/tienda">
+              Entrar a la tienda
+            </Link>
+            <Link className="ghost-btn" to="/tienda?cat=ropa">
+              Ver ropa
+            </Link>
+          </div>
+        </div>
+        <div className="hero-stage">
+          {featured.slice(0, 3).map((product, index) => (
+            <div key={product.id} className={`hero-card hero-card-${index + 1}`}>
+              <ProductTile product={product} compact />
+            </div>
+          ))}
+        </div>
       </header>
+
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {[...TICKER, ...TICKER].map((word, i) => (
+            <span key={`${word}-${i}`}>{word}</span>
+          ))}
+        </div>
+      </div>
 
       <section className="home-block">
         <header className="block-head">
-          <h2>Colección marea</h2>
-          <Link to="/tienda">Ver todo</Link>
+          <div>
+            <p className="eyebrow">Selección</p>
+            <h2>Colección marea</h2>
+          </div>
+          <Link className="text-link" to="/tienda">
+            Ver todo
+          </Link>
         </header>
         <div className="grid grid-home">
           {featured.map((product, index) => (
@@ -40,10 +61,20 @@ export function HomePage() {
       </section>
 
       <section className="home-cats">
-        <Link to="/tienda?cat=ropa">Ropa</Link>
-        <Link to="/tienda?cat=calzado">Calzado</Link>
-        <Link to="/tienda?cat=accesorios">Accesorios</Link>
+        <Link to="/tienda?cat=ropa">
+          <span>01</span>
+          Ropa
+        </Link>
+        <Link to="/tienda?cat=calzado">
+          <span>02</span>
+          Calzado
+        </Link>
+        <Link to="/tienda?cat=accesorios">
+          <span>03</span>
+          Accesorios
+        </Link>
       </section>
+      <SeenRail />
     </>
   )
 }
